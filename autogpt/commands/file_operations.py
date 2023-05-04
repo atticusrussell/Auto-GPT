@@ -16,6 +16,7 @@ from autogpt.config import Config
 from autogpt.logs import logger
 from autogpt.spinner import Spinner
 from autogpt.utils import readable_file_size
+from autogpt.memory import get_memory
 
 CFG = Config()
 
