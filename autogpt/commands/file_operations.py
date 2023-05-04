@@ -154,26 +154,13 @@ def read_file(filename: str) -> str:
     Returns:
         str: The contents of the file
     """
-    if os.path.splitext(filename)[1] == ".pdf":
-        try:
-            with open(filename, 'rb') as pdf_file:
-                pdf_reader = PyPDF2.PdfReader(pdf_file)
-                content = ''
-                for page_num in range(len(pdf_reader.pages)):
-                    page_obj = pdf_reader.pages[page_num]
-                    content += page_obj.extract_text()
-            logger.debug(f"Read PDF file '{filename}'")
-            return content
-        except Exception as err:
-            return f"Error reading PDF file: {err}"
-    else:
-        try:
-            charset_match = charset_normalizer.from_path(filename).best()
-            encoding = charset_match.encoding
-            logger.debug(f"Read file '{filename}' with encoding '{encoding}'")
-            return str(charset_match)
-        except Exception as err:
-            return f"Error: {err}"
+    try:
+        charset_match = charset_normalizer.from_path(filename).best()
+        encoding = charset_match.encoding
+        logger.debug(f"Read file '{filename}' with encoding '{encoding}'")
+        return str(charset_match)
+    except Exception as err:
+        return f"Error: {err}"
 
 
 def ingest_file(
