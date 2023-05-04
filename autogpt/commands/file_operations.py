@@ -176,8 +176,9 @@ def read_file(filename: str) -> str:
             return f"Error: {err}"
 
 
+@command("ingest_file", "Ingest file", '"filename": "<filename>"')
 def ingest_file(
-    filename: str, memory, max_length: int = 4000, overlap: int = 200
+    filename: str, memory=get_memory(CFG, init=False), max_length: int = 4000, overlap: int = 200
 ) -> None:
     """
     Ingest a file by reading its content, splitting it into chunks with a specified
