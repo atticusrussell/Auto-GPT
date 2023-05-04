@@ -1,12 +1,9 @@
 import argparse
 import logging
 
-from pathlib import Path
 from autogpt.commands.file_operations import ingest_file, list_files
 from autogpt.config import Config
-from autogpt.logs import logger
 from autogpt.memory import get_memory
-from autogpt.workspace import Workspace
 
 cfg = Config()
 
@@ -71,28 +68,6 @@ def main() -> None:
         default=4000,
     )
     args = parser.parse_args()
-
-    # initialize workspace
-    if 'workspace_directory' in locals() or 'workspace_directory' in locals():
-        if workspace_directory is None:
-            workspace_directory = Path(__file__).parent / "auto_gpt_workspace"
-        else:
-            workspace_directory = Path(workspace_directory)
-    else:
-        workspace_directory = Path(__file__).parent / "auto_gpt_workspace"
-    
-    # TODO: pass in the ai_settings file and the env file and have them cloned into
-    #   the workspace directory so we can bind them to the agent.
-    workspace_directory = Workspace.make_workspace(workspace_directory)
-    cfg.workspace_path = str(workspace_directory)
-
-    # HACK: doing this here to collect some globals that depend on the workspace.
-    file_logger_path = workspace_directory / "file_logger.txt"
-    if not file_logger_path.exists():
-        with file_logger_path.open(mode="w", encoding="utf-8") as f:
-            f.write("File Operation Logger ")
-
-    cfg.file_logger_path = str(file_logger_path)
 
     # Initialize memory
     memory = get_memory(cfg, init=args.init)
